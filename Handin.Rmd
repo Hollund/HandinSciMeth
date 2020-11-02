@@ -1,0 +1,54 @@
+---
+title: "R Notebook"
+output: html_notebook
+
+
+---
+```{r}
+library(tidyverse)
+
+Tesla <- read_csv("~/R/RDocs/Tesla.csv.csv", col_types = cols(
+  Date = col_date(format = "%m/%d/%Y"),
+  Open = col_double(),
+  High = col_double(),
+  Low = col_double(),
+  Close = col_double(),
+  Volume = col_double(),
+  `Adj Close` = col_double()
+)
+)
+
+```
+
+
+
+```{r}
+Tesla %>%
+  ggplot() +
+    aes(x = Date) +
+    aes(y = (Open + Close)/2) +
+    aes(color = (Open-Close)) +
+    geom_point()
+```
+
+```{r}
+qplot( x = Date, y = Open + Close, color = Open-Close, data = Tesla, geom = "smooth")
+
+```
+```{r}
+sel_avGain <- select(Tesla, Low, High, Open, Close)
+
+mutate(sel_avGain, 
+  Count = n(),
+  avg = Open-Close,
+  avgHL = High-Low
+  )
+  
+sel_avGain %>%
+  summary()
+
+
+```
+
+
+
